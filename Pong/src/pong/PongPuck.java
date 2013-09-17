@@ -1,5 +1,7 @@
 package pong;
 
+import java.util.List;
+
 import jgame.Context;
 import jgame.GObject;
 import jgame.GSprite;
@@ -7,6 +9,7 @@ import jgame.ImageCache;
 import jgame.controller.ConstantMovementController;
 import jgame.listener.BoundaryRemovalListener;
 import jgame.listener.HitTestListener;
+import jgame.listener.ParentBoundsListener;
 
 /**
  * The controller that causes the puck to move.
@@ -22,14 +25,6 @@ public class PongPuck extends GSprite {
 
 		// Add the controller.
 		addController(cmc);
-		// Create a puck.
-		PongPuck puck = new PongPuck();
-
-		// Add the puck.
-		add(puck);
-
-		// Center the puck.
-		snapChild(puck);
 		// Remove the puck when it's outside the game bounds.
 		addListener(new BoundaryRemovalListener());
 		// inside the constructor
@@ -39,13 +34,35 @@ public class PongPuck extends GSprite {
 			@Override
 			public void invoke(GObject target, Context context) {
 				flip();
+				// Get a list of all paddles hit.
+				List<PongPaddle> paddlesHit = context
+						.hitTestClass(PongPaddle.class);
+				// Get the relevant paddle.
+			    // Get the vertical distance between the centers.
+			    double offset = getY() - paddlesHit.get(0).getY();
 
+			    // Move vertically.
+			    cmc.setVelocityY(cmc.getVelocityY() + offset * 0.1);
 			}
+
 		};
 		// Add the listener.
 		addListener(htl);
 		// Set the primitive shape to a circle.
 		setPrimitive(PrimitiveShape.CIRCLE);
+		// Create the bounce listener.
+		ParentBoundsListener bounce = new ParentBoundsListener() {
+		    @Override
+		    public void invoke(GObject target, Context context) {
+		        cmc.setVelocityY(-cmc.getVelocityY());
+		    }
+		};
+
+		// Only bounce vertically.
+		bounce.setValidateHorizontal(false);
+
+		// Add the bounce listener.
+		addListener(bounce);
 	}
 
 	/**
