@@ -21,8 +21,16 @@ public class PongPuck extends GSprite {
 	public PongPuck() {
 		// Get the image cache, get the image, and call the super constructor.
 		super(ImageCache.forClass(Pong.class).get("puck.png"));
+		//Randomizer.
+		double vx;
+		if (Math.random() > 0.5) {
+		    vx = 5;
+		} else {
+		    vx = -5;
+		}
+
 		// Create the controller.
-		cmc = new ConstantMovementController(-5, 0);
+		cmc = new ConstantMovementController(vx, 0);
 
 		// Add the controller.
 		addController(cmc);
