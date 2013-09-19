@@ -54,7 +54,20 @@ public class PongPuck extends GSprite {
 		ParentBoundsListener bounce = new ParentBoundsListener() {
 		    @Override
 		    public void invoke(GObject target, Context context) {
-		        cmc.setVelocityY(-cmc.getVelocityY());
+		    	// Get the current velocity.
+		    	double vx = cmc.getVelocityX();
+
+		    	// Test the sign.
+		    	if (vx > 0) {
+		    	    vx += 0.01;
+		    	} else if (vx < 0) {
+		    	    vx -= 0.01;
+		    	} else {
+		    	    // It's zero; do nothing.
+		    	}
+
+		    	// Set the velocity.
+		    	cmc.setVelocityX(vx);
 		    }
 		};
 

@@ -1,7 +1,12 @@
 package pong;
 
+import java.util.List;
+
+import jgame.Context;
 import jgame.GContainer;
+import jgame.GObject;
 import jgame.controller.ControlScheme;
+import jgame.listener.FrameListener;
 
 public class PongGameView extends GContainer {
 	public PongGameView() {
@@ -31,6 +36,23 @@ public class PongGameView extends GContainer {
 
 		// Center the puck.
 		snapChild(puck);
-		
+		FrameListener fl = new FrameListener() {
+
+			@Override
+			public void invoke(GObject target, Context context) {
+				// Get all the pucks.
+				List<PongPuck> pucks = context
+						.getInstancesOfClass(PongPuck.class);
+
+				// Is it empty?
+				boolean noPucksLeft = pucks.isEmpty();
+				// Set the current game view.
+				if (noPucksLeft == true) {
+					context.setCurrentGameView(Pong.Views.GAME_OVER);
+				}
+			}
+		};
+		addListener(fl);
 	}
+
 }
