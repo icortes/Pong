@@ -8,6 +8,7 @@ import jgame.GSprite;
 import jgame.ImageCache;
 import jgame.controller.ConstantMovementController;
 import jgame.listener.BoundaryRemovalListener;
+import jgame.listener.FrameListener;
 import jgame.listener.HitTestListener;
 import jgame.listener.ParentBoundsListener;
 
@@ -38,11 +39,11 @@ public class PongPuck extends GSprite {
 				List<PongPaddle> paddlesHit = context
 						.hitTestClass(PongPaddle.class);
 				// Get the relevant paddle.
-			    // Get the vertical distance between the centers.
-			    double offset = getY() - paddlesHit.get(0).getY();
+				// Get the vertical distance between the centers.
+				double offset = getY() - paddlesHit.get(0).getY();
 
-			    // Move vertically.
-			    cmc.setVelocityY(cmc.getVelocityY() + offset * 0.1);
+				// Move vertically.
+				cmc.setVelocityY(cmc.getVelocityY() + offset * 0.1);
 			}
 
 		};
@@ -52,23 +53,10 @@ public class PongPuck extends GSprite {
 		setPrimitive(PrimitiveShape.CIRCLE);
 		// Create the bounce listener.
 		ParentBoundsListener bounce = new ParentBoundsListener() {
-		    @Override
-		    public void invoke(GObject target, Context context) {
-		    	// Get the current velocity.
-		    	double vx = cmc.getVelocityX();
-
-		    	// Test the sign.
-		    	if (vx > 0) {
-		    	    vx += 0.01;
-		    	} else if (vx < 0) {
-		    	    vx -= 0.01;
-		    	} else {
-		    	    // It's zero; do nothing.
-		    	}
-
-		    	// Set the velocity.
-		    	cmc.setVelocityX(vx);
-		    }
+			@Override
+			public void invoke(GObject target, Context context) {
+				cmc.setVelocityY(-cmc.getVelocityY());
+			}
 		};
 
 		// Only bounce vertically.
@@ -76,6 +64,30 @@ public class PongPuck extends GSprite {
 
 		// Add the bounce listener.
 		addListener(bounce);
+		// Create an acceleration listener.
+		FrameListener accelerate = new FrameListener() {
+
+			@Override
+			public void invoke(GObject target, Context context) {
+				// Get the current velocity.
+				double vx = cmc.getVelocityX();
+
+				// Test the sign.
+				if (vx > 0) {
+					vx += 0.01;
+				} else if (vx < 0) {
+					vx -= 0.01;
+				} else {
+					// It's zero; do nothing.
+				}
+
+				// Set the velocity.
+				cmc.setVelocityX(vx);
+
+			}
+		};
+		// Add the listener.
+		addListener(accelerate);
 	}
 
 	/**
