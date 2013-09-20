@@ -49,4 +49,4 @@ public class PongPaddle extends GSprite {
 		addListener(limiter);
 	}
 }
-// Jenny you mean short girl :3.
+// Jenny is a mean short girl :3.
