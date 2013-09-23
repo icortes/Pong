@@ -28,6 +28,9 @@ public class PongPuck extends GSprite {
 		} else {
 		    vx = -5;
 		}
+			
+		//vx = 5;
+		
 
 		// Create the controller.
 		cmc = new ConstantMovementController(vx, 0);
