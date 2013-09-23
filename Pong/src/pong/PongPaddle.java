@@ -6,6 +6,7 @@ import jgame.GSprite;
 import jgame.ImageCache;
 import jgame.controller.ControlScheme;
 import jgame.controller.KeyboardLocationController;
+import jgame.listener.FrameListener;
 import jgame.listener.ParentBoundsListener;
 
 public class PongPaddle extends GSprite {
@@ -47,6 +48,18 @@ public class PongPaddle extends GSprite {
 
 		// Add the listener.
 		addListener(limiter);
+
+		// Scale down a bit each frame.
+		FrameListener scale = new FrameListener() {
+			
+			@Override
+			public void invoke(GObject target, Context context) {
+				setScaleY(getScaleY() * 0.999);
+				
+			}
+		};
+		// Add the scale listener.
+		addListener(scale);
 	}
 }
 // Jenny is a mean short girl :3.
