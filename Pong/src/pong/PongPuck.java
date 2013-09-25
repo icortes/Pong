@@ -32,8 +32,9 @@ public class PongPuck extends GSprite {
 		//vx = 5;
 		
 
-		// Create the controller.
-		cmc = new ConstantMovementController(vx, 0);
+		// Create the controller
+		// Random y-direction.
+		cmc = new ConstantMovementController(vx, Math.random() * 2 - 1);
 
 		// Add the controller.
 		addController(cmc);
